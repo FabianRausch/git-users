@@ -1,0 +1,9 @@
+.dataCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #f1356d;
+    border-radius: 5px;
+}

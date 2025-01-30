@@ -1,0 +1,22 @@
+.userDetail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.favoriteToggle > svg {
+    color: #f1356d;
+}
+
+.dataCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+
+

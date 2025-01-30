@@ -1,0 +1,30 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.items {
+    flex: 1;
+    justify-content: center;
+    display: flex;
+    gap: 1rem;
+}
+
+.homeItem {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.active {
+    color: #f1356d;
+}

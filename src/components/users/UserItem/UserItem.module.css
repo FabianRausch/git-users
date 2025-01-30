@@ -1,0 +1,16 @@
+.userActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #f1356d;
+}
+
+.launchLink {
+    display: flex;
+    align-items: center;
+}
+
+.favoriteToggle > svg {
+   color: #f1356d;
+}
