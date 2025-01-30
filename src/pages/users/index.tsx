@@ -18,6 +18,7 @@ interface Props {
 
 const Users = ({ initialUsers, initialNextSlice }: Props) => {
   const {
+    users,
     handleSearch,
     setPage,
     page,
@@ -54,7 +55,7 @@ const Users = ({ initialUsers, initialNextSlice }: Props) => {
       {notFoundSearch ? (
         <Typography sx={{ pt: "16px" }}>No matches with: {search}</Typography>
       ) : (
-        <UsersGrid />
+        <UsersGrid users={users} notFoundSearch={notFoundSearch}/>
       )}
 
       {noMoreResults && (

@@ -3,16 +3,16 @@ import React from "react";
 import UserItem from "../UserItem";
 import styles from "./UsersGrid.module.css";
 import { useUsers } from "@/context/UsersContext";
+import { UserItemList } from "@/types/users";
 
-const UsersGrid = ({}) => {
+interface Props {
+  users: UserItemList[];
+  notFoundSearch?: boolean
+}
 
-    const {
-      isLoading,
-      users,
-      isFavoriteUser,
-      toggleFavoriteUser,
-      notFoundSearch,
-    } = useUsers();
+const UsersGrid = ({ users, notFoundSearch}: Props) => {
+  const { isLoading, isFavoriteUser, toggleFavoriteUser } =
+    useUsers();
   return (
     <List sx={{ width: "100%", maxWidth: 350 }}>
       {users.map((user) => (

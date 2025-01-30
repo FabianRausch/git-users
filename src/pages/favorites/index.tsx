@@ -7,7 +7,7 @@ import styles from "./Favorites.module.css";
 import EmptyFavorites from "@/components/users/EmptyFavorites";
 
 const Favorites = () => {
-  const { isLoading, favoriteUsers, toggleFavoriteUser, isFavoriteUser } =
+  const { favoriteUsers } =
     useUsers();
   const [tempFavorites] = useState(favoriteUsers);
   return (
@@ -18,9 +18,6 @@ const Favorites = () => {
       {tempFavorites.length ? (
         <UsersGrid
           users={tempFavorites}
-          isLoading={isLoading}
-          isFavoriteUser={isFavoriteUser}
-          toggleFavoriteUser={toggleFavoriteUser}
         />
       ) : (
         <EmptyFavorites />
