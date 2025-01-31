@@ -30,19 +30,22 @@ export const UsersProvider = ({ children }: Props) => {
 
   const toggleFavoriteUser = (user: UserItemList) => {
     const exist = favoriteUsers.find((u) => u.id === user.id);
+    let tempFavorites = favoriteUsers;
     if (exist) {
       openSnackbar({
         open: true,
         message: `Remove from favorites`,
       });
-      setFavoriteUsers(favoriteUsers.filter((u) => u.id !== user.id));
+      tempFavorites = favoriteUsers.filter((u) => u.id !== user.id);
     } else {
       openSnackbar({
         open: true,
         message: `Added to favorites`,
       });
-      setFavoriteUsers([...favoriteUsers, user]);
+      tempFavorites = [...favoriteUsers, user];
     }
+    setFavoriteUsers(tempFavorites);
+    localStorage.setItem("favorite-users", JSON.stringify(tempFavorites));
   };
 
   const isFavoriteUser = (userId: number) =>
@@ -110,9 +113,18 @@ export const UsersProvider = ({ children }: Props) => {
   useEffect(() => {
     if (searchedUsers.length) getSearchUsersResults({ q: search, page });
     else {
-      if (!search)getAllUsers();
+      if (!search) getAllUsers();
     }
   }, [page]);
+
+  const getStoredFavoriteUsers = () => {
+      const favorites = JSON.parse(localStorage.getItem("favorite-users") || "[]");
+      setFavoriteUsers(favorites);
+  };
+
+  useEffect(() => {
+    getStoredFavoriteUsers();
+  }, []);
 
   const usersToShow = () => {
     let usersToShow = users;
