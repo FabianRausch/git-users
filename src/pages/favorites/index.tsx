@@ -7,8 +7,7 @@ import styles from "./Favorites.module.css";
 import EmptyFavorites from "@/components/users/EmptyFavorites";
 
 const Favorites = () => {
-  const { favoriteUsers } =
-    useUsers();
+  const { favoriteUsers } = useUsers();
   const [tempFavorites] = useState(favoriteUsers);
   return (
     <div className={styles.favorites}>
@@ -16,9 +15,7 @@ const Favorites = () => {
         Favorites
       </Typography>
       {tempFavorites.length ? (
-        <UsersGrid
-          users={tempFavorites}
-        />
+        <UsersGrid users={tempFavorites} />
       ) : (
         <EmptyFavorites />
       )}

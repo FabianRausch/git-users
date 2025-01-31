@@ -1,12 +1,11 @@
 import UsersLayout from "@/components/ui/Layouts/UsersLayout";
 import { useUsers } from "@/context/UsersContext";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useEffect, type ReactNode } from "react";
 
 import styles from "./Users.module.css";
 import UsersGrid from "@/components/users/UsersGrid";
 import SearchBar from "@/components/users/SearchBar";
-import useInView from "@/hooks/useInView";
 import { getUsers } from "@/services/users";
 import { usersMapper } from "@/utils/mapper/users";
 import { UserItemList } from "@/types/users";
@@ -17,29 +16,18 @@ interface Props {
 }
 
 const Users = ({ initialUsers, initialNextSlice }: Props) => {
+  
   const {
     users,
     handleSearch,
     setPage,
-    page,
     search,
-    setIsLoading,
     notFoundSearch,
     noMoreResults,
     setUsers,
     setNextSince,
+    isLoading,
   } = useUsers();
-  const { elementRef, isInView } = useInView();
-
-  useEffect(() => {
-    let timeout;
-    
-    if (isInView) {
-      if (timeout) clearTimeout(timeout);
-      setIsLoading(true);
-      timeout = setTimeout(() => setPage(page + 1), 600);
-    }
-  }, [isInView]);
 
   useEffect(() => {
     setUsers(initialUsers);
@@ -55,13 +43,17 @@ const Users = ({ initialUsers, initialNextSlice }: Props) => {
       {notFoundSearch ? (
         <Typography sx={{ pt: "16px" }}>No matches with: {search}</Typography>
       ) : (
-        <UsersGrid users={users} notFoundSearch={notFoundSearch}/>
+        <UsersGrid users={users} notFoundSearch={notFoundSearch} />
       )}
 
       {noMoreResults && (
         <Typography sx={{ pt: "16px" }}>No more results</Typography>
       )}
-      <div ref={elementRef} style={{ height: "120px" }}></div>
+      {!notFoundSearch && !noMoreResults && !isLoading && (
+        <Button sx={{color: '#f1356d'}} onClick={() => setPage((prev) => prev + 1)}>
+          Load more users
+        </Button>
+      )}
     </div>
   );
 };

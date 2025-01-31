@@ -9,7 +9,7 @@ const UsersLayout = ({ children }: Props) => {
   return (
     <>
       <Navbar />
-      <main style={{padding: '16px', paddingTop: '70px'}}>{children}</main>
+      <main style={{ padding: "70px 16px" }}>{children}</main>
     </>
   );
 };

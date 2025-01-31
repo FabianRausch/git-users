@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type UserItemList = {
   id: number;
   username: string;
@@ -10,9 +12,7 @@ export type UsersContextType = {
   users: UserItemList[];
   favoriteUsers: UserItemList[];
   search: string;
-  page: number;
-  setIsLoading: (value: boolean) => void
-  setPage: (page: number) => void;
+  setPage: Dispatch<SetStateAction<number>>;
   toggleFavoriteUser: (user: UserItemList) => void;
   isFavoriteUser: (userId: number) => boolean;
   handleSearch: (value: string) => void;

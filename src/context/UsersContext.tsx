@@ -27,6 +27,7 @@ export const UsersProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [notFoundSearch, setNotFoundSearch] = useState<boolean>(false);
   const [noMoreResults, setNoMoreResults] = useState<boolean>(false);
+
   const toggleFavoriteUser = (user: UserItemList) => {
     const exist = favoriteUsers.find((u) => u.id === user.id);
     if (exist) {
@@ -67,7 +68,7 @@ export const UsersProvider = ({ children }: Props) => {
         setNotFoundSearch(false);
         setNoMoreResults(false);
         if (!total_count) setNotFoundSearch(true);
-        if (total_count && items.length) setNoMoreResults(true);
+        if (total_count && !items.length) setNoMoreResults(true);
         setSearchedUsers(
           removeDuplicates([
             ...(params.q === search ? searchedUsers : []),
@@ -108,12 +109,14 @@ export const UsersProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (searchedUsers.length) getSearchUsersResults({ q: search, page });
-    else getAllUsers();
+    else {
+      if (!search)getAllUsers();
+    }
   }, [page]);
 
   const usersToShow = () => {
     let usersToShow = users;
-    if (searchedUsers.length || notFoundSearch) usersToShow = searchedUsers;
+    if (search) usersToShow = searchedUsers;
     return usersToShow;
   };
 
@@ -124,8 +127,6 @@ export const UsersProvider = ({ children }: Props) => {
         users: usersToShow(),
         favoriteUsers,
         search,
-        page,
-        setIsLoading,
         toggleFavoriteUser,
         isFavoriteUser,
         handleSearch,
