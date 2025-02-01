@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { useSnackbar } from "./SnackbarContext";
+import { removeDuplicatesByKey } from "@/utils/arrays";
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined);
 
@@ -60,10 +61,6 @@ export const UsersProvider = ({ children }: Props) => {
     getSearchUsersResults({ q: value });
   };
 
-  const removeDuplicates = (arr: UserItemList[]) => {
-    return [...new Map(arr.map((item) => [item.id, item])).values()];
-  };
-
   const getSearchUsersResults = (params: { q: string; page?: number }) => {
     setIsLoading(true);
     searchUsers(params)
@@ -73,10 +70,13 @@ export const UsersProvider = ({ children }: Props) => {
         if (!total_count) setNotFoundSearch(true);
         if (total_count && !items.length) setNoMoreResults(true);
         setSearchedUsers(
-          removeDuplicates([
-            ...(params.q === search ? searchedUsers : []),
-            ...usersMapper(items),
-          ])
+          removeDuplicatesByKey(
+            [
+              ...(params.q === search ? searchedUsers : []),
+              ...usersMapper(items),
+            ],
+            "id"
+          )
         );
       })
       .catch(() => {
@@ -112,14 +112,14 @@ export const UsersProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (searchedUsers.length) getSearchUsersResults({ q: search, page });
-    else {
-      if (!search) getAllUsers();
-    }
+    else if (!search) getAllUsers();
   }, [page]);
 
   const getStoredFavoriteUsers = () => {
-      const favorites = JSON.parse(localStorage.getItem("favorite-users") || "[]");
-      setFavoriteUsers(favorites);
+    const favorites = JSON.parse(
+      localStorage.getItem("favorite-users") || "[]"
+    );
+    setFavoriteUsers(favorites);
   };
 
   useEffect(() => {

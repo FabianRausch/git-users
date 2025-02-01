@@ -21,7 +21,7 @@ const Favorites = () => {
         Favorites
       </Typography>
       {tempFavorites.length ? (
-        <UsersGrid users={tempFavorites } />
+        <UsersGrid users={tempFavorites} />
       ) : (
         <EmptyFavorites />
       )}

@@ -41,7 +41,7 @@ const Users = ({ initialUsers, initialNextSlice }: Props) => {
       </Typography>
       <SearchBar onChange={handleSearch} value={search} />
       {notFoundSearch ? (
-        <Typography sx={{ pt: "16px" }}>No matches with: {search}</Typography>
+        <Typography sx={{ pt: "16px", textWrap: 'wrap', textAlign: 'center' }}>No matches with: {search}</Typography>
       ) : (
         <UsersGrid users={users} notFoundSearch={notFoundSearch} />
       )}

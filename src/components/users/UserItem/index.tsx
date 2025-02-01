@@ -25,7 +25,13 @@ const UserItem = ({ user, toggleFavoriteUser, isFavoriteUser }: Props) => {
       <ListItemAvatar>
         <Avatar src={user?.avatar_url} alt="user-avatar" />
       </ListItemAvatar>
-      <ListItemText primary={user?.username} />
+      <ListItemText
+        title={user?.username}
+        primary={user?.username}
+        slotProps={{
+          primary: { overflow: "hidden", textOverflow: "ellipsis", },
+        }}
+      />
       <div className={styles.userActions}>
         <IconButton
           className={styles.favoriteToggle}
