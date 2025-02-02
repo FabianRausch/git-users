@@ -8,18 +8,14 @@ export type UserItemList = {
 };
 
 export type UsersContextType = {
-  isLoading: boolean;
   users: UserItemList[];
+  nextSince: number;
   favoriteUsers: UserItemList[];
-  search: string;
-  setPage: Dispatch<SetStateAction<number>>;
-  toggleFavoriteUser: (user: UserItemList) => void;
-  isFavoriteUser: (userId: number) => boolean;
-  handleSearch: (value: string) => void;
-  setNextSince: (value: number) => void;
-  setUsers: (users: UserItemList[]) => void;
-  notFoundSearch: boolean;
   noMoreResults: boolean;
+  setUsers: Dispatch<SetStateAction<UserItemList[]>>;
+  setNextSince: Dispatch<SetStateAction<number>>;
+  setFavoriteUsers: Dispatch<SetStateAction<UserItemList[]>>;
+  setNoMoreResults: Dispatch<SetStateAction<boolean>>;
 };
 
 export type UserDetails = {

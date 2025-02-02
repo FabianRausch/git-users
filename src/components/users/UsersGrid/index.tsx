@@ -2,17 +2,17 @@ import { List, ListItem, Skeleton } from "@mui/material";
 import React from "react";
 import UserItem from "../UserItem";
 import styles from "./UsersGrid.module.css";
-import { useUsers } from "@/context/UsersContext";
+import useFavorites from "@/hooks/useFavorites";
 import { UserItemList } from "@/types/users";
 
 interface Props {
   users: UserItemList[];
-  notFoundSearch?: boolean
+  isLoading?: boolean;
+  notFoundSearch?: boolean;
 }
 
-const UsersGrid = ({ users, notFoundSearch}: Props) => {
-  const { isLoading, isFavoriteUser, toggleFavoriteUser } =
-    useUsers();
+const UsersGrid = ({ users, isLoading, notFoundSearch }: Props) => {
+  const { isFavoriteUser, toggleFavoriteUser } = useFavorites();
   return (
     <List sx={{ width: "100%", maxWidth: 350 }}>
       {users.map((user) => (

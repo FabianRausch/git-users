@@ -1,5 +1,12 @@
 import { Snackbar, SnackbarCloseReason, SnackbarProps } from "@mui/material";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 const SnackbarContext = createContext<
   { openSnackbar: (props: SnackbarProps) => void } | undefined
@@ -15,20 +22,30 @@ export const SnackbarProvider = ({ children }: Props) => {
     autoHideDuration: 3000,
   });
 
-  const openSnackbar = (props: SnackbarProps) => {
-    setSnackbarProps({ ...snackbarProps, ...props });
-  };
+  const openSnackbar = useCallback(
+    (props: SnackbarProps) => {
+      setSnackbarProps({ ...snackbarProps, ...props });
+    },
+    [snackbarProps]
+  );
 
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") return;
-    setSnackbarProps({ ...snackbarProps, open: false });
-  };
+  const handleClose = useCallback(
+    (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+      if (reason === "clickaway") return;
+      setSnackbarProps({ ...snackbarProps, open: false });
+    },
+    [snackbarProps]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      openSnackbar,
+    }),
+    [openSnackbar]
+  );
 
   return (
-    <SnackbarContext.Provider value={{ openSnackbar }}>
+    <SnackbarContext.Provider value={contextValue}>
       {children}
       <Snackbar {...snackbarProps} onClose={handleClose} />
     </SnackbarContext.Provider>

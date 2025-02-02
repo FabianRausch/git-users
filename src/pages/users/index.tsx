@@ -1,7 +1,6 @@
 import UsersLayout from "@/components/ui/Layouts/UsersLayout";
-import { useUsers } from "@/context/UsersContext";
 import { Button, Typography } from "@mui/material";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import styles from "./Users.module.css";
 import UsersGrid from "@/components/users/UsersGrid";
@@ -9,30 +8,36 @@ import SearchBar from "@/components/users/SearchBar";
 import { getUsers } from "@/services/users";
 import { usersMapper } from "@/utils/mapper/users";
 import { UserItemList } from "@/types/users";
+import useSearch from "@/hooks/useSearch";
+import useUsers from "@/hooks/useUsers";
 
 interface Props {
   initialUsers: UserItemList[];
-  initialNextSlice: number;
+  initialNextSince: number;
 }
 
-const Users = ({ initialUsers, initialNextSlice }: Props) => {
-  
+const Users = ({ initialUsers, initialNextSince }: Props) => {
   const {
     users,
+    onPage: onPageUsers,
+    noMoreResults: noMoreResultsUsers,
+    isLoading: isLoadingUsers,
+  } = useUsers(initialUsers, initialNextSince);
+
+  const {
+    searchedUsers,
     handleSearch,
-    setPage,
+    onPage: onPageSearch,
     search,
     notFoundSearch,
-    noMoreResults,
-    setUsers,
-    setNextSince,
-    isLoading,
-  } = useUsers();
+    noMoreResults: noMoreResultSearch,
+    isLoading: isLoadingSearch,
+  } = useSearch();
 
-  useEffect(() => {
-    setUsers(initialUsers);
-    setNextSince(initialNextSlice);
-  }, []);
+  const noMoreResults = noMoreResultsUsers || noMoreResultSearch;
+  const isLoading = isLoadingSearch || isLoadingUsers;
+  const usersToShow = search ? searchedUsers : users;
+  const onPage = search ? onPageSearch : onPageUsers;
 
   return (
     <div className={styles.users}>
@@ -41,16 +46,22 @@ const Users = ({ initialUsers, initialNextSlice }: Props) => {
       </Typography>
       <SearchBar onChange={handleSearch} value={search} />
       {notFoundSearch ? (
-        <Typography sx={{ pt: "16px", textWrap: 'wrap', textAlign: 'center' }}>No matches with: {search}</Typography>
+        <Typography sx={{ pt: "16px", textWrap: "wrap", textAlign: "center" }}>
+          No matches with: {search}
+        </Typography>
       ) : (
-        <UsersGrid users={users} notFoundSearch={notFoundSearch} />
+        <UsersGrid
+          users={usersToShow}
+          notFoundSearch={notFoundSearch}
+          isLoading={isLoading}
+        />
       )}
 
       {noMoreResults && (
         <Typography sx={{ pt: "16px" }}>No more results</Typography>
       )}
       {!notFoundSearch && !noMoreResults && !isLoading && (
-        <Button sx={{color: '#f1356d'}} onClick={() => setPage((prev) => prev + 1)}>
+        <Button sx={{ color: "#f1356d" }} onClick={onPage}>
           Load more users
         </Button>
       )}
@@ -70,7 +81,7 @@ export async function getServerSideProps() {
     return {
       props: {
         initialUsers: usersMapper(users),
-        initialNextSlice: users[users.length - 1]?.id,
+        initialNextSince: users[users.length - 1]?.id,
       },
     };
   } catch (error) {

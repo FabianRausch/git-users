@@ -9,7 +9,11 @@ const getRequest = async (
   let queryParams = "";
   if (params) queryParams = handleQueryUrl(params);
   try {
-    const res = await fetch(`${apiUrl}${url}${queryParams}`);
+    const res = await fetch(`${apiUrl}${url}${queryParams}`, {
+      next: {
+        revalidate: 3600
+      }
+    });
 
     if (!res.ok) {
       throw res;

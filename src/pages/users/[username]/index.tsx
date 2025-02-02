@@ -1,5 +1,4 @@
 import UsersLayout from "@/components/ui/Layouts/UsersLayout";
-import { useUsers } from "@/context/UsersContext";
 import { UserDetails } from "@/types/users";
 import { userDetailsHandler } from "@/utils/handlers/users";
 import StarIcon from "@mui/icons-material/Star";
@@ -13,12 +12,13 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import styles from "./UserDetail.module.css";
 import DetailsSkeleton from "@/components/userDetails/DetailsSkeleton";
 import ItemDetail from "@/components/userDetails/ItemDetail";
 import DataCard from "@/components/userDetails/DataCard";
 import { getUserByUsername } from "@/services/users";
+import useFavorites from "@/hooks/useFavorites";
 
 interface Props {
   username: string;
@@ -26,7 +26,8 @@ interface Props {
 }
 
 const UserDetail = ({ username, user }: Props) => {
-  const { isLoading, toggleFavoriteUser, isFavoriteUser } = useUsers();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { toggleFavoriteUser, isFavoriteUser } = useFavorites();
   const userToSave = {
     id: user.id,
     username: user.username,
@@ -34,7 +35,9 @@ const UserDetail = ({ username, user }: Props) => {
     url: `users/${username}`,
   };
 
-  const { id, avatar_url } = user;
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   return isLoading ? (
     <DetailsSkeleton />
@@ -42,13 +45,13 @@ const UserDetail = ({ username, user }: Props) => {
     <div className={styles.userDetail}>
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
-          avatar={<Avatar src={avatar_url} />}
+          avatar={<Avatar src={user.avatar_url} />}
           action={
             <IconButton
               onClick={() => toggleFavoriteUser(userToSave)}
               className={styles.favoriteToggle}
             >
-              {isFavoriteUser(id) ? <StarIcon /> : <StarOutlineIcon />}
+              {isFavoriteUser(user.id) ? <StarIcon /> : <StarOutlineIcon />}
             </IconButton>
           }
           title={
