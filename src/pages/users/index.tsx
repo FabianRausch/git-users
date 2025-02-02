@@ -8,8 +8,7 @@ import SearchBar from "@/components/users/SearchBar";
 import { getUsers } from "@/services/users";
 import { usersMapper } from "@/utils/mapper/users";
 import { UserItemList } from "@/types/users";
-import useSearch from "@/hooks/useSearch";
-import useUsers from "@/hooks/useUsers";
+import useListToShow from "@/hooks/useListToShow";
 
 interface Props {
   initialUsers: UserItemList[];
@@ -18,26 +17,14 @@ interface Props {
 
 const Users = ({ initialUsers, initialNextSince }: Props) => {
   const {
-    users,
-    onPage: onPageUsers,
-    noMoreResults: noMoreResultsUsers,
-    isLoading: isLoadingUsers,
-  } = useUsers(initialUsers, initialNextSince);
-
-  const {
-    searchedUsers,
-    handleSearch,
-    onPage: onPageSearch,
+    usersToShow,
     search,
+    handleSearch,
     notFoundSearch,
-    noMoreResults: noMoreResultSearch,
-    isLoading: isLoadingSearch,
-  } = useSearch();
-
-  const noMoreResults = noMoreResultsUsers || noMoreResultSearch;
-  const isLoading = isLoadingSearch || isLoadingUsers;
-  const usersToShow = search ? searchedUsers : users;
-  const onPage = search ? onPageSearch : onPageUsers;
+    noMoreResults,
+    isLoading,
+    onLoadMore,
+  } = useListToShow(initialUsers, initialNextSince);
 
   return (
     <div className={styles.users}>
@@ -61,7 +48,7 @@ const Users = ({ initialUsers, initialNextSince }: Props) => {
         <Typography sx={{ pt: "16px" }}>No more results</Typography>
       )}
       {!notFoundSearch && !noMoreResults && !isLoading && (
-        <Button sx={{ color: "#f1356d" }} onClick={onPage}>
+        <Button sx={{ color: "#f1356d" }} onClick={onLoadMore}>
           Load more users
         </Button>
       )}

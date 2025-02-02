@@ -40,7 +40,7 @@ const useUsers = (initialUsers: UserItemList[], initialNextSince: number) => {
       .finally(() => setIsLoading(false));
   }, [nextSince]);
 
-  const onPage = useCallback(() => {
+  const onLoadMore = useCallback(() => {
     getAllUsers();
   }, [nextSince]);
 
@@ -54,9 +54,9 @@ const useUsers = (initialUsers: UserItemList[], initialNextSince: number) => {
       users,
       noMoreResults,
       isLoading,
-      onPage,
+      onLoadMore,
     }),
-    [users, noMoreResults, isLoading, onPage]
+    [users, noMoreResults, isLoading, onLoadMore]
   );
 
   return props;

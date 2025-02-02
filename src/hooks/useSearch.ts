@@ -58,7 +58,7 @@ const useSearch = () => {
     [search]
   );
 
-  const onPage = useCallback(() => {
+  const onLoadMore = useCallback(() => {
     setPage((prev) => prev + 1);
     getSearchUsersResults({ q: search, page: page + 1 });
   }, [page, search, searchedUsers]);
@@ -68,7 +68,7 @@ const useSearch = () => {
       searchedUsers,
       search,
       handleSearch,
-      onPage,
+      onLoadMore,
       isLoading,
       notFoundSearch,
       noMoreResults,
@@ -77,7 +77,7 @@ const useSearch = () => {
       searchedUsers,
       search,
       handleSearch,
-      onPage,
+      onLoadMore,
       isLoading,
       notFoundSearch,
       noMoreResults,
